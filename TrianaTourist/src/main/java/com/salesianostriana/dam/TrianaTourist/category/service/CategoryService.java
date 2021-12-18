@@ -2,12 +2,12 @@ package com.salesianostriana.dam.TrianaTourist.category.service;
 
 import com.salesianostriana.dam.TrianaTourist.category.model.Category;
 import com.salesianostriana.dam.TrianaTourist.category.repos.CategoryRepository;
-import com.salesianostriana.dam.TrianaTourist.poi.model.Poi;
-import com.salesianostriana.dam.TrianaTourist.poi.repos.PoiRepository;
+import com.salesianostriana.dam.TrianaTourist.errors.exceptions.NamedEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,5 +30,15 @@ public class CategoryService {
 
     public void delete(UUID id) {
         repository.deleteById(id);
+    }
+
+    public Category findCategoryByName(String categoryName) throws NamedEntityNotFoundException {
+        Optional<Category> category = repository.findCategoryByNameEquals(categoryName);
+
+        if (category.isEmpty()) {
+            throw new NamedEntityNotFoundException(categoryName, Category.class);
+        }
+
+        return category.get();
     }
 }
