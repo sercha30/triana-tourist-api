@@ -8,7 +8,7 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +36,7 @@ public class Poi implements Serializable {
     private String name;
     private String location;
     private String description;
-    private LocalDateTime date;
+    private LocalDate date;
     private String coverPhoto;
     private String photo2;
     private String photo3;
