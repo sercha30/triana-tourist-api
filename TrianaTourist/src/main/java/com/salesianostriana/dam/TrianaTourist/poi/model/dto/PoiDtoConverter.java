@@ -6,6 +6,7 @@ import com.salesianostriana.dam.TrianaTourist.poi.model.Poi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,24 +15,6 @@ import java.util.stream.Collectors;
 public class PoiDtoConverter {
 
     private final CategoryRepository categoryRepository;
-
-    public Poi convertCreatePoiDtoToPoi(CreatePoiDto createPoiDto, Poi poi) {
-        return Poi.builder()
-                .id(poi.getId())
-                .name(createPoiDto.getName())
-                .location(createPoiDto.getLocation())
-                .description(createPoiDto
-                        .getDescription() == null ? createPoiDto.getDescription() : "Sin descripción")
-                .date(createPoiDto.getDate())
-                .coverPhoto(createPoiDto.getCoverPhoto())
-                .photo2(createPoiDto.getPhoto2() == null ? createPoiDto.getPhoto2() : "Sin foto")
-                .photo3(createPoiDto.getPhoto3() == null ? createPoiDto.getPhoto2() : "Sin foto")
-                .categories(List.of(
-                        categoryRepository
-                                .findCategoryByNameEquals(createPoiDto.getCategoryName()).get())
-                )
-                .build();
-    }
 
     public GetSinglePoiDto convertPoiToGetSinglePoiDto(Poi poi) {
         return GetSinglePoiDto.builder()
@@ -49,6 +32,29 @@ public class PoiDtoConverter {
                                 .map(Category::getName)
                                 .collect(Collectors.toList())
                 )
+                .build();
+    }
+
+    public Poi convertGetSinglePoiDtoToPoi(GetSinglePoiDto poiDto) {
+        return Poi.builder()
+                .id(poiDto.getId())
+                .name(poiDto.getName())
+                .location(poiDto.getLocation())
+                .date(poiDto.getDate())
+                .description(poiDto.getDescription())
+                .coverPhoto(poiDto.getCoverPhoto())
+                .photo2(poiDto.getPhoto2())
+                .photo3(poiDto.getPhoto3())
+                .categories(categoryRepository.findByNameIn(poiDto.getCategoriesName())
+                        .isPresent() ? categoryRepository.findByNameIn(poiDto.getCategoriesName()).get() : new ArrayList<>())
+                .build();
+    }
+
+    public GetListPoiDto convertPoiToGetListPoiDto(Poi poi) {
+        return GetListPoiDto.builder()
+                .id(poi.getId())
+                .name(poi.getName())
+                .coverPhoto(poi.getCoverPhoto())
                 .build();
     }
 }
