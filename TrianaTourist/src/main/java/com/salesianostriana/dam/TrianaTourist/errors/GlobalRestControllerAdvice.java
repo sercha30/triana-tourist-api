@@ -7,7 +7,6 @@ import com.salesianostriana.dam.TrianaTourist.errors.model.ApiError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -30,7 +29,7 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({MissingRequestBodyException.class})
-    public ResponseEntity<?> handleMissingRequestValueException(MissingRequestValueException ex, WebRequest request) {
+    public ResponseEntity<?> handleMissingRequestValueException(MissingRequestBodyException ex, WebRequest request) {
         return buildApiError(ex, request, HttpStatus.BAD_REQUEST);
     }
 

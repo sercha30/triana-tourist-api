@@ -6,7 +6,7 @@ import org.springframework.beans.PropertyAccessorFactory;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class UniquePhotosValidator implements ConstraintValidator<UniquePhotos, String> {
+public class UniquePhotosValidator implements ConstraintValidator<UniquePhotos, Object> {
 
     private String coverPhoto;
     private String photo2;
@@ -20,7 +20,7 @@ public class UniquePhotosValidator implements ConstraintValidator<UniquePhotos, 
     }
 
     @Override
-    public boolean isValid(String photo, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(Object photo, ConstraintValidatorContext constraintValidatorContext) {
         String coverPhotoValue = (String) PropertyAccessorFactory.forBeanPropertyAccess(photo)
                 .getPropertyValue(coverPhoto);
         String photo2Value = (String) PropertyAccessorFactory.forBeanPropertyAccess(photo)

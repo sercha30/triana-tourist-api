@@ -9,7 +9,6 @@ import com.salesianostriana.dam.TrianaTourist.category.repos.CategoryRepository;
 import com.salesianostriana.dam.TrianaTourist.errors.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MissingRequestValueException;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
@@ -38,7 +37,7 @@ public class CategoryService {
 
     public GetSingleCategoryDto findById(UUID id) throws SingleEntityNotFoundException, MissingPathVariableException {
         if(id == null) {
-            throw new MissingPathVariableException("{category.pathVariable.missing}");
+            throw new MissingPathVariableException();
         }
 
         Optional<Category> category = repository.findById(id);
@@ -52,15 +51,15 @@ public class CategoryService {
 
     public GetSingleCategoryDto save(CreateCategoryDto newCategory) throws EntityExistsException, MissingRequestBodyException {
         if(newCategory == null) {
-            throw new MissingRequestBodyException("{category.requestBody.missing}");
+            throw new MissingRequestBodyException();
         }
 
         Category category = Category.builder()
                 .name(newCategory.getName())
                 .build();
 
-        if(repository.findAll().contains(category)) {
-            throw new EntityExistsException("{category.entity.exists}");
+        if(repository.findByNameEquals(category.getName()).isPresent()) {
+            throw new EntityExistsException("La Categoría indicada ya existe");
         }
 
         repository.save(category);
@@ -70,7 +69,7 @@ public class CategoryService {
 
     public GetSingleCategoryDto edit(UUID id, CreateCategoryDto createCategoryDto) throws MissingRequestBodyException{
         if(createCategoryDto == null) {
-            throw new MissingRequestBodyException("{category.requestBody.missing}");
+            throw new MissingRequestBodyException();
         }
 
         GetSingleCategoryDto categoryDto = findById(id);

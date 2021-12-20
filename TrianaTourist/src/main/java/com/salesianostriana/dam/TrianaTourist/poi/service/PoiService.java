@@ -40,7 +40,7 @@ public class PoiService {
 
     public GetSinglePoiDto findById(UUID id) throws SingleEntityNotFoundException, MissingPathVariableException {
         if(id == null) {
-            throw new MissingPathVariableException("{poi.pathVariable.missing}");
+            throw new MissingPathVariableException();
         }
 
         Optional<Poi> poi = repository.findById(id);
@@ -54,22 +54,16 @@ public class PoiService {
 
     public GetSinglePoiDto save(CreatePoiDto newPoi) throws EntityExistsException, MissingRequestBodyException {
         if(newPoi == null) {
-            throw new MissingRequestBodyException("{poi.requestBody.missing}");
+            throw new MissingRequestBodyException();
         }
 
         Poi poi = Poi.builder()
                 .name(newPoi.getName())
                 .location(newPoi.getLocation())
-                .description(newPoi.getDescription())
                 .date(newPoi.getDate())
                 .coverPhoto(newPoi.getCoverPhoto())
-                .photo2(newPoi.getPhoto2())
-                .photo3(newPoi.getPhoto3())
-                .name(newPoi.getName())
-                .location(newPoi.getLocation())
                 .description(newPoi
                         .getDescription() == null ? newPoi.getDescription() : "Sin descripción")
-                .date(newPoi.getDate())
                 .coverPhoto(newPoi.getCoverPhoto())
                 .photo2(newPoi.getPhoto2() == null ? newPoi.getPhoto2() : "Sin foto")
                 .photo3(newPoi.getPhoto3() == null ? newPoi.getPhoto2() : "Sin foto")
@@ -79,8 +73,8 @@ public class PoiService {
                 )
                 .build();
 
-        if(repository.findAll().contains(poi)) {
-            throw new EntityExistsException("{poi.entity.exists}");
+        if(repository.findByNameEquals(poi.getName()).isPresent()) {
+            throw new EntityExistsException("El POI indicado ya existe");
         }
 
         repository.save(poi);
@@ -90,7 +84,7 @@ public class PoiService {
 
     public GetSinglePoiDto edit(UUID id, EditPoiDto editPoiDto) throws MissingRequestBodyException {
         if(editPoiDto == null) {
-            throw new MissingRequestBodyException("{poi.requestBody.missing}");
+            throw new MissingRequestBodyException();
         }
 
         GetSinglePoiDto poiDto = findById(id);

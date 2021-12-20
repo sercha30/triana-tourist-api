@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.TrianaTourist.poi.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.salesianostriana.dam.TrianaTourist.validation.annotations.CategoryExists;
 import com.salesianostriana.dam.TrianaTourist.validation.annotations.UniquePhotos;
 import lombok.*;
@@ -34,7 +33,7 @@ public class CreatePoiDto{
     private String description;
 
     @Past(message = "{poi.date.past}")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")
+    /*@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")*/
     @DateTimeFormat(pattern = "yyyy", iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
 
